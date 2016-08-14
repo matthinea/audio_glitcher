@@ -1,10 +1,3 @@
-/*develpment objectives:
-     role of midi input: instead of a simple gate, let a knob control /rate of glitches/. so, at 0, no glitching, at 0.5 glitching every 4s, at 1.0 glitching on average every 0.4s.
-         *logic: code a dust.kr as a trigger, and the rate of the dust.kr will be input from a bus controlled by midi cc
-
-code to do:
-*test
-*/
 
 s.boot;
 
@@ -14,7 +7,6 @@ s.boot;
 ~uGenSelect = Bus.control(s, 2);
 ~uGenSelect.set(1);
 
-//copy/past from above, to mody for buff of choice
 (
 SynthDef(\test_BufRd2,
 	{
@@ -31,8 +23,6 @@ SynthDef(\test_BufRd2,
 				1, 0.8)
 			+ WhiteNoise.ar(0.3) //static effect
 		];
-		//use nested maxs and mins to eliminate middle band?
-		//use nested LFOs to make 'random'-seeming 'holds'
 		cycle = a.size * 0.5;
 		cycle.postln;
 		select = LFSaw.kr(1.0,1.0,cycle,cycle).scope;
@@ -47,33 +37,21 @@ SynthDef(\test_BufRd2,
 				BufFrames.kr(bufnum)- 2
 			)
 		);
-		// env = EnvGen.kr(Env.new([0.1, 1, 0.9, 0.8], [0.001, 1, 1]));
-		env = 1; //we could do something with the envelope to avoid the popping maybe
+	
+		env = 1; 
 		out = out * env * mul;
 		Out.ar(0, out);
 }).add
 )
 
-(
+
 ~bufPsychSynth = Synth(\test_BufRd2);
-//~bufPsychSynth2 = Synth(\test_BufRd2);
-)
-//to make it so one synth continues where the other one left off: ??
-           //tests
-(
-{
-LFNoise0.ar( //change rate
-				LFNoise0.ar( //change rate of rate of change
-					LFNoise1.kr(18), //change rate of rate of change of rate of change
-					3, 6),
-	1, 0.8)}.scope;
-)
 
 
 
 {LFSaw.kr(1.0,0.0,1,1)}.plot(10);
 
-//alternate envs:
+//alternate envelopes:
 /*
 Env.new(
 					[0, 3, 0.2, 2, 1.8, 1.95, 1.7, 2.6, 0.4, 2],
@@ -93,7 +71,6 @@ Env.new(
 
 
 
-//put it in a global variable
 
 
 (
